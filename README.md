@@ -2,5 +2,5 @@
 
 ### TODO
 
-- Migrate vimrc from current mac config
-- Theming:
+- [ ] Migrate vimrc from current mac config
+- [ ]Theming
