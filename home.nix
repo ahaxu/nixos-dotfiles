@@ -129,7 +129,7 @@
     theme = "Gruvbox Dark Soft";
 
     font = {
-      name="Iosevka";
+      name="Iosevka Term";
       size = 12;
     };
 
