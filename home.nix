@@ -99,6 +99,11 @@
     usbutils # lsusb
   ];
 
+  # golang config
+  programs.go = {
+    enable = true;
+  };
+
   # basic configuration of git, please change to your own
   programs.git = {
     enable = true;
@@ -204,7 +209,7 @@
       set backspace=indent,eol,start  " Makes backspace key more powerful.
       set incsearch                   " Shows the match while typing
       set hlsearch                    " Highlight found searches
-      set noerrorbells                " No beeps
+      "set noerrorbells                " No beeps
       set number                      " Show line numbers
       set showcmd                     " Show me what I'm typing
       set noswapfile                  " Don't use swapfile
@@ -227,7 +232,6 @@
       set tabstop=4
     '';
     extraLuaConfig = /* lua */ ''
-
       vim.o.termguicolors  = true
       vim.cmd('colorscheme gruvbox-material')
       vim.g.gruvbox_material_background = 'hard'
