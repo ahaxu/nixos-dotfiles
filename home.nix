@@ -118,6 +118,26 @@
     };
   };
 
+  programs.kitty = {
+    enable = true;
+    settings = {
+      scrollback_lines = 10000;
+      enable_audio_bell = false;
+      update_check_interval = 0;
+    };
+
+    theme = "Gruvbox Dark Soft";
+
+    font = {
+      name="Iosevka";
+      size = 12;
+    };
+
+    extraConfig = ''
+      hide_window_decorations yes
+    '';
+  };
+
   # alacritty - a cross-platform, GPU-accelerated terminal emulator
   programs.alacritty = {
     enable = true;
@@ -204,6 +224,7 @@
       set nocursorline                " Do not highlight cursor (speeds up highlighting)
       set lazyredraw                  " Wait to redraw
       set expandtab
+      set tabstop=4
     '';
     extraLuaConfig = /* lua */ ''
 
