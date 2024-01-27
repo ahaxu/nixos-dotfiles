@@ -72,6 +72,9 @@
     # chat tools
     telegram-desktop
 
+    # brave browser
+    brave
+
     # nix related
     #
     # it provides the command `nom` works just like `nix`
@@ -79,7 +82,7 @@
     nix-output-monitor
 
     # productivity
-    hugo # static site generator
+    # hugo # static site generator
     glow # markdown previewer in terminal
 
     btop  # replacement of htop/nmon
