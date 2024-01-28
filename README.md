@@ -4,4 +4,6 @@
 
 - [x] Migrate vimrc from current mac config
 - [ ] Theming
-- [ ] Shortcut for kitty console
+- [x] Shortcut for kitty console
+- [ ] Config gnome-tweak to dot file (extra esc by capslock, swap ctrl vs cmd)
+- [ ] Re organize
