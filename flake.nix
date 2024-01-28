@@ -1,10 +1,13 @@
 {
-  description = "NixOS configuration";
+  description = "Lk's NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, ... }: {
@@ -21,6 +24,11 @@
 
             # Optionally, use home-manager.extraSpecialArgs to pass
             # arguments to home.nix
+
+            # home-manager.extraSpecialArgs = {
+            #   inherit inputs; 
+            # };
+
           }
         ];
       };

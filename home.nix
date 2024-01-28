@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }:
 
 {
   # TODO please change the username & home direcotry to your own
@@ -68,6 +68,16 @@
     gawk
     zstd
     gnupg
+
+    clang
+    git
+    glibc
+    (glibcLocales.override { locales = [ "en_US.UTF-8" ]; })
+    openssl
+    pkg-config
+    rustup
+    stdenv
+    cmake
 
     # chat tools
     telegram-desktop
@@ -178,66 +188,93 @@
   };
 
   # neovim configuration
-  programs.neovim = {
+  programs.neovim = 
+  let
+    toLua = str: "lua << EOF\n${str}\nEOF\n";
+    toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
+  in
+  {
     enable = true;
-    defaultEditor = true;
+
     viAlias = true;
     vimAlias = true;
     vimdiffAlias = true;
-    plugins = with pkgs.vimPlugins; [
-      nvim-lspconfig
-      nvim-treesitter.withAllGrammars
-      plenary-nvim
-      gruvbox-material
-      mini-nvim
-      vim-go
-      trim-nvim 
-      haskell-tools-nvim
-      nvim-fzf
 
-      #(fromGitHub "HEAD" "elihunter173/dirbuf.nvim") # https://gist.github.com/nat-418/d76586da7a5d113ab90578ed56069509
+    extraPackages = with pkgs; [
+      lua-language-server
+      rnix-lsp
+
+      xclip
+      wl-clipboard
     ];
-    extraConfig =''
-      """"""""""""""""""""""
-      "      Settings      "
-      """"""""""""""""""""""
-      set nocompatible                " Enables us Vim specific features
-      filetype off                    " Reset filetype detection first ...
-      filetype plugin indent on       " ... and enable filetype detection
-      set ttyfast                     " Indicate fast terminal conn for faster redraw
-      set laststatus=2                " Show status line always
-      set encoding=utf-8              " Set default encoding to UTF-8
-      set autoread                    " Automatically read changed files
-      set autoindent                  " Enabile Autoindent
-      set backspace=indent,eol,start  " Makes backspace key more powerful.
-      set incsearch                   " Shows the match while typing
-      set hlsearch                    " Highlight found searches
-      "set noerrorbells                " No beeps
-      set number                      " Show line numbers
-      set showcmd                     " Show me what I'm typing
-      set noswapfile                  " Don't use swapfile
-      set nobackup                    " Don't create annoying backup files
-      set splitright                  " Vertical windows should be split to right
-      set splitbelow                  " Horizontal windows should split to bottom
-      set autowrite                   " Automatically save before :next, :make etc.
-      set hidden                      " Buffer should still exist if window is closed
-      set fileformats=unix,dos,mac    " Prefer Unix over Windows over OS 9 formats
-      set noshowmatch                 " Do not show matching brackets by flickering
-      set noshowmode                  " We show the mode with airline or lightline
-      set ignorecase                  " Search case insensitive...
-      set smartcase                   " ... but not it begins with upper case
-      set completeopt=menu,menuone    " Show popup menu, even if there is one entry
-      set pumheight=10                " Completion window max size
-      set nocursorcolumn              " Do not highlight column (speeds up highlighting)
-      set nocursorline                " Do not highlight cursor (speeds up highlighting)
-      set lazyredraw                  " Wait to redraw
-      set expandtab
-      set tabstop=4
-    '';
-    extraLuaConfig = /* lua */ ''
-      vim.o.termguicolors  = true
-      vim.cmd('colorscheme gruvbox-material')
-      vim.g.gruvbox_material_background = 'hard'
+
+    plugins = with pkgs.vimPlugins; [
+
+      {
+        plugin = nvim-lspconfig;
+        config = toLuaFile ./nvim/plugin/lsp.lua;
+      }
+
+      {
+        plugin = comment-nvim;
+        config = toLua "require(\"Comment\").setup()";
+      }
+
+
+      neodev-nvim
+
+      nvim-cmp 
+      {
+        plugin = nvim-cmp;
+        config = toLuaFile ./nvim/plugin/cmp.lua;
+      }
+
+      {
+        plugin = telescope-nvim;
+        config = toLuaFile ./nvim/plugin/telescope.lua;
+      }
+
+      telescope-fzf-native-nvim
+
+      cmp_luasnip
+      cmp-nvim-lsp
+
+      luasnip
+      friendly-snippets
+
+
+      lualine-nvim
+      nvim-web-devicons
+
+      {
+        plugin = (nvim-treesitter.withPlugins (p: [
+          p.tree-sitter-nix
+          p.tree-sitter-vim
+          p.tree-sitter-bash
+          p.tree-sitter-lua
+          p.tree-sitter-python
+          p.tree-sitter-json
+        ]));
+        config = toLuaFile ./nvim/plugin/treesitter.lua;
+      }
+
+      vim-nix
+      vim-airline
+
+      {
+        plugin = onedark-nvim;
+        config = "colorscheme onedark";
+      }
+
+    ];
+
+    extraLuaConfig = ''
+      ${builtins.readFile ./nvim/options.lua}
+      ${builtins.readFile ./nvim/plugin/lsp.lua}
+      ${builtins.readFile ./nvim/plugin/cmp.lua}
+      ${builtins.readFile ./nvim/plugin/telescope.lua}
+      ${builtins.readFile ./nvim/plugin/treesitter.lua}
+      ${builtins.readFile ./nvim/plugin/other.lua}
     '';
   };
 
