@@ -153,7 +153,23 @@
 
     extraConfig = ''
       hide_window_decorations yes
-    '';
+
+      # key remap
+      map ctrl+c copy_to_clipboard
+      map ctrl+v paste_from_clipboard
+
+      map ctrl+equal change_font_size all +2.0
+      map ctrl+plus change_font_size all +2.0
+
+      map ctrl+minus change_font_size all -2.0
+      map ctrl+kp_subtract change_font_size all -2.0
+
+      map ctrl+0 change_font_size all 0
+
+      # rebind ctrl+c to kill current process
+      map ctrl+k send_text all \x03 # SIGINT
+
+      '';
   };
 
   # alacritty - a cross-platform, GPU-accelerated terminal emulator
