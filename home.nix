@@ -167,7 +167,7 @@
       map ctrl+0 change_font_size all 0
 
       # rebind ctrl+c to kill current process
-      map ctrl+k send_text all \x03 # SIGINT
+      map ctrl+k send_text all \x03
 
       '';
   };

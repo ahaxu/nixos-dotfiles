@@ -33,14 +33,20 @@
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "vi_VN";
     LC_IDENTIFICATION = "vi_VN";
-    LC_MEASUREMENT = "vi_VN";
-    LC_MONETARY = "vi_VN";
+
     LC_NAME = "vi_VN";
     LC_NUMERIC = "vi_VN";
     LC_PAPER = "vi_VN";
     LC_TELEPHONE = "vi_VN";
-    LC_TIME = "vi_VN";
+
+    LC_TIME = "en_US.UTF-8";
+    LC_MONETARY = "en_US.UTF-8";
   };
+
+  # powerMngt
+  powerManagement.resumeCommands = ''
+    ${pkgs.utillinux}/bin/rfkill unblock wlan
+  '';
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
@@ -87,6 +93,11 @@
       firefox
     #  thunderbird
     ];
+
+    # allow public key for ssh
+    openssh.authorizedKeys.keyFiles = [
+      ./ssh/authorized_keys
+    ];
   };
 
   # Allow unfree packages
@@ -113,6 +124,14 @@
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
+
+  services.openssh = {
+    enable = true;
+    # require public key authentication for better security
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+    #settings.PermitRootLogin = "yes";
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
