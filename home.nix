@@ -33,7 +33,6 @@
 
     luajitPackages.lua-lsp
 
-
     neofetch
     nnn # terminal file manager
 
@@ -248,8 +247,17 @@
         config = toLua "require(\"Comment\").setup()";
       }
 
-
       neodev-nvim
+
+      {
+        plugin = neo-tree-nvim;
+        config = toLuaFile ./nvim/plugin/neo-tree.lua;
+      }
+
+      nvim-web-devicons
+      vim-devicons
+
+      vim-surround
 
       nvim-cmp 
       {
@@ -272,7 +280,6 @@
 
 
       lualine-nvim
-      nvim-web-devicons
 
       {
         plugin = (nvim-treesitter.withPlugins (p: [
@@ -301,6 +308,7 @@
       ${builtins.readFile ./nvim/plugin/lsp.lua}
       ${builtins.readFile ./nvim/plugin/cmp.lua}
       ${builtins.readFile ./nvim/plugin/telescope.lua}
+      ${builtins.readFile ./nvim/plugin/neo-tree.lua}
       ${builtins.readFile ./nvim/plugin/treesitter.lua}
       ${builtins.readFile ./nvim/plugin/other.lua}
     '';
