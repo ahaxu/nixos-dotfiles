@@ -68,6 +68,7 @@
     gawk
     zstd
     gnupg
+    clipboard-jh
 
     clang
     git
@@ -144,11 +145,11 @@
       update_check_interval = 0;
     };
 
-    theme = "Gruvbox Dark Soft";
+    theme = "Gruvbox Dark";
 
     font = {
       name="Iosevka Term";
-      size = 12;
+      size = 10;
     };
 
     extraConfig = ''
