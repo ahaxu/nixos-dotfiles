@@ -159,8 +159,9 @@
       hide_window_decorations yes
 
       # key remap
-      map ctrl+c copy_to_clipboard
-      map ctrl+v paste_from_clipboard
+
+      # map ctrl+c copy_to_clipboard
+      # map ctrl+v paste_from_clipboard
 
       map ctrl+equal change_font_size all +2.0
       map ctrl+plus change_font_size all +2.0
