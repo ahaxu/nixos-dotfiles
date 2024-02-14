@@ -72,3 +72,5 @@ map("n", "<S-t>", [[<Cmd>BufferLineCycleNext<CR>]], opt)
 map("n", "<S-n>", [[<Cmd>BufferLineCyclePrev<CR>]], opt)
 map("n", "gb", [[<Cmd>BufferLinePick<CR>]], opt)
 
+--map('n', '<sc-v>', [[<cmd>lua print('ctrl+shift+v')<cr>]], {noremap = true})
+

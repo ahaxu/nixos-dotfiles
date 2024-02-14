@@ -150,18 +150,19 @@
 
     theme = "Gruvbox Dark";
 
-    font = {
-      name="Iosevka Term";
-      size = 10;
-    };
+    #font = {
+    #  name="Iosevka Term";
+    #  size = 10;
+    #};
 
     extraConfig = ''
+
       hide_window_decorations yes
 
       # key remap
 
-      # map ctrl+c copy_to_clipboard
-      # map ctrl+v paste_from_clipboard
+      map ctrl+c copy_to_clipboard
+      map ctrl+v paste_from_clipboard
 
       map ctrl+equal change_font_size all +2.0
       map ctrl+plus change_font_size all +2.0
@@ -174,6 +175,12 @@
       # rebind ctrl+c to kill current process
       map ctrl+k send_text all \x03
 
+      # map ctrl shift v
+      # https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
+      map ctrl+shift+v send_text all \x1b[86;5u
+
+      # font
+      font_family      Operator Mono Book
       '';
   };
 
