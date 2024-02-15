@@ -179,10 +179,13 @@
 
       # map ctrl shift v
       # https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
-      map ctrl+shift+v send_text all \x1b[86;5u
+      map ctrl+shift+v send_text all \x1b[86;6u
+      # neotree for vim key binding
+      map ctrl+1 send_text all \x1b[49;5u
 
       # font
-      font_family      Operator Mono Book
+      font_family   Operator Mono Book
+      font_size     10
       '';
   };
 
