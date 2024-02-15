@@ -82,11 +82,14 @@
     stdenv
     cmake
 
+    python3
+
     # chat tools
     telegram-desktop
 
-    # brave browser
+    # browser
     brave
+    opera
 
     # nix related
     #
