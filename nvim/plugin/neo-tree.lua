@@ -247,6 +247,6 @@ local function map(mode, lhs, rhs, opts)
 end
 
 vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
-map("n", "<Leader>ne", [[<Cmd>Neotree<CR>]], opt)
-map("n", "<Leader>nt", [[<Cmd>Neotree toggle<CR>]], opt)
+--map("n", "<Leader>ne", [[<Cmd>Neotree<CR>]], opt)
+map("n", "<Leader>ne", [[<Cmd>Neotree toggle<CR>]], opt)
 
