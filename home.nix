@@ -296,8 +296,9 @@ in
         # ===
         # Languages
         # haskell syntax highlighting
-        # haskell-vim
+        haskell-vim
         vim-hoogle
+        vim-go
         # nix syntax highlighting
         vim-nix
         vim-markdown
