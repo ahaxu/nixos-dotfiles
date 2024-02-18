@@ -24,13 +24,13 @@ let
     explorer.icon.enableNerdfont = true;
     explorer.file.child.template =
       "[git | 2] [selection | clip | 1] [indent][icon | 1] [diagnosticError & 1][diagnosticWarning & 1][filename omitCenter 1][modified][readonly] [linkIcon & 1][link growRight 1 omitCenter 5][size]";
-  };
+    };
 
 in
 
-{
-  home.username = "lk";
-  home.homeDirectory = "/home/lk";
+  {
+    home.username = "lk";
+    home.homeDirectory = "/home/lk";
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
@@ -137,6 +137,11 @@ in
     enable = true;
   };
 
+  programs.fish = {
+    enable = true;
+  };
+
+
   # basic configuration of git, please change to your own
   programs.git = {
     enable = true;
@@ -201,23 +206,24 @@ in
       font_family   Operator Mono Book
       font_size     10
       '';
-  };
-
-
-  programs.bash = {
-    enable = true;
-    enableCompletion = true;
-    # TODO add your cusotm bashrc here
-    bashrcExtra = ''
-      export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
-    '';
-
-    # set some aliases, feel free to add more or remove some
-    shellAliases = {
-      k = "kubectl";
-      urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
-      urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
     };
+
+
+    programs.bash = {
+      enable = true;
+      enableCompletion = true;
+
+      # TODO add your cusotm bashrc here
+      bashrcExtra = ''
+        export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+      '';
+
+      # set some aliases, feel free to add more or remove some
+      shellAliases = {
+        k = "kubectl";
+        urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
+        urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
+      };
   };
 
   # neovim configuration
@@ -352,17 +358,17 @@ in
       ];
 
       extraLuaConfig = ''
-        ${builtins.readFile ./nvim/options.lua}
-        ${builtins.readFile ./nvim/plugin/lsp.lua}
-        ${builtins.readFile ./nvim/plugin/cmp.lua}
-        ${builtins.readFile ./nvim/plugin/telescope.lua}
-        ${builtins.readFile ./nvim/plugin/neo-tree.lua}
-        ${builtins.readFile ./nvim/plugin/treesitter.lua}
-        ${builtins.readFile ./nvim/plugin/coc.lua}
-        ${builtins.readFile ./nvim/plugin/other.lua}
+      ${builtins.readFile ./nvim/options.lua}
+      ${builtins.readFile ./nvim/plugin/lsp.lua}
+      ${builtins.readFile ./nvim/plugin/cmp.lua}
+      ${builtins.readFile ./nvim/plugin/telescope.lua}
+      ${builtins.readFile ./nvim/plugin/neo-tree.lua}
+      ${builtins.readFile ./nvim/plugin/treesitter.lua}
+      ${builtins.readFile ./nvim/plugin/coc.lua}
+      ${builtins.readFile ./nvim/plugin/other.lua}
       '';
     };
-  xdg.configFile."nvim/coc-settings.json".text = builtins.toJSON cocSettings;
+    xdg.configFile."nvim/coc-settings.json".text = builtins.toJSON cocSettings;
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
