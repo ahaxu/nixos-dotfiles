@@ -298,6 +298,7 @@ in
         # haskell syntax highlighting
         haskell-vim
         vim-hoogle
+
         vim-go
         # nix syntax highlighting
         vim-nix
@@ -357,6 +358,7 @@ in
         ${builtins.readFile ./nvim/plugin/telescope.lua}
         ${builtins.readFile ./nvim/plugin/neo-tree.lua}
         ${builtins.readFile ./nvim/plugin/treesitter.lua}
+        ${builtins.readFile ./nvim/plugin/coc.lua}
         ${builtins.readFile ./nvim/plugin/other.lua}
       '';
     };
