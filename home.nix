@@ -83,9 +83,14 @@
     cmake
 
     python3
+    nodejs_21
+
+    dbeaver
+    mongodb-compass
 
     # chat tools
     telegram-desktop
+    slack
 
     # browser
     brave

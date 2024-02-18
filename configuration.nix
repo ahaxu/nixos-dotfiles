@@ -25,6 +25,11 @@
   };
 
   networking.hostName = "nixos"; # Define your hostname.
+
+  nix.settings.trusted-users = [
+    "lk"
+    "root"
+  ];
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
