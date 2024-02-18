@@ -1,30 +1,36 @@
 { config, pkgs, inputs, ... }:
 
+# TODO move this to neovim config module
+# coc config file for haskell
+let
+  cocSettings = {
+    "diagnostic.maxWindowHeight" = 60;
+    "diagnostic.virtualText" = true;
+    "diagnostic.virtualTextCurrentLineOnly" = false;
+    "codeLens.enable" = true;
+    languageserver = {
+      nix = {
+        command = "rnix-lsp";
+        filetypes = [ "nix" ];
+      };
+      haskell = {
+        command = "haskell-language-server";
+        args = [ "--lsp" "-d" "-l" "/tmp/LanguageServer.log" ];
+        rootPatterns = [ ".hie-bios" "cabal.project" ];
+        filetypes = [ "hs" "lhs" "haskell" ];
+        settings.languageServerHaskell.formattingProvider = "fourmolu";
+      };
+    };
+    explorer.icon.enableNerdfont = true;
+    explorer.file.child.template =
+      "[git | 2] [selection | clip | 1] [indent][icon | 1] [diagnosticError & 1][diagnosticWarning & 1][filename omitCenter 1][modified][readonly] [linkIcon & 1][link growRight 1 omitCenter 5][size]";
+  };
+
+in
+
 {
-  # TODO please change the username & home direcotry to your own
   home.username = "lk";
   home.homeDirectory = "/home/lk";
-
-  # link the configuration file in current directory to the specified location in home directory
-  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
-  # link all files in `./scripts` to `~/.config/i3/scripts`
-  # home.file.".config/i3/scripts" = {
-  #   source = ./scripts;
-  #   recursive = true;   # link recursively
-  #   executable = true;  # make all files executable
-  # };
-
-  # encode the file content in nix configuration file directly
-  # home.file.".xxx".text = ''
-  #     xxx
-  # '';
-
-  # set cursor size and dpi for 4k monitor
-  #xresources.properties = {
-  #  "Xcursor.size" = 16;
-  #  "Xft.dpi" = 172;
-  #};
 
   # Packages that should be installed to the user profile.
   home.packages = with pkgs; [
@@ -53,12 +59,12 @@
     # networking tools
     mtr # A network diagnostic tool
     iperf3
-    dnsutils  # `dig` + `nslookup`
+    dnsutils # `dig` + `nslookup`
     ldns # replacement of `dig`, it provide the command `drill`
     aria2 # A lightweight multi-protocol & multi-source command-line download utility
     socat # replacement of openbsd-netcat
     nmap # A utility for network discovery and security auditing
-    ipcalc  # it is a calculator for the IPv4/v6 addresses
+    ipcalc # it is a calculator for the IPv4/v6 addresses
 
     # misc
     cowsay
@@ -83,7 +89,10 @@
     cmake
 
     python3
+    python311Packages.pip
+
     nodejs_21
+    yarn
 
     dbeaver
     mongodb-compass
@@ -106,7 +115,7 @@
     # hugo # static site generator
     glow # markdown previewer in terminal
 
-    btop  # replacement of htop/nmon
+    btop # replacement of htop/nmon
     iotop # io monitoring
     iftop # network monitoring
 
@@ -164,7 +173,7 @@
 
     extraConfig = ''
 
-      hide_window_decorations yes
+    hide_window_decorations yes
 
       # key remap
 
@@ -194,20 +203,6 @@
       '';
   };
 
-  # alacritty - a cross-platform, GPU-accelerated terminal emulator
-  programs.alacritty = {
-    enable = true;
-    # custom settings
-    settings = {
-      env.TERM = "xterm-256color";
-      font = {
-        size = 12;
-        draw_bold_text_with_bright_colors = true;
-      };
-      scrolling.multiplier = 5;
-      selection.save_to_clipboard = true;
-    };
-  };
 
   programs.bash = {
     enable = true;
@@ -226,104 +221,145 @@
   };
 
   # neovim configuration
-  programs.neovim = 
-  let
-    toLua = str: "lua << EOF\n${str}\nEOF\n";
-    toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
-  in
-  {
-    enable = true;
-
-    viAlias = true;
-    vimAlias = true;
-    vimdiffAlias = true;
-
-    extraPackages = with pkgs; [
-      lua-language-server
-      rnix-lsp
-
-      xclip
-      wl-clipboard
-    ];
-
-    plugins = with pkgs.vimPlugins; [
-
-      {
-        plugin = nvim-lspconfig;
-        config = toLuaFile ./nvim/plugin/lsp.lua;
-      }
-
-      {
-        plugin = comment-nvim;
-        config = toLua "require(\"Comment\").setup()";
-      }
-
-      neodev-nvim
-
-      {
-        plugin = neo-tree-nvim;
-        config = toLuaFile ./nvim/plugin/neo-tree.lua;
-      }
-
-      nvim-web-devicons
-      vim-devicons
-
-      vim-surround
-
-      nvim-cmp 
-      {
-        plugin = nvim-cmp;
-        config = toLuaFile ./nvim/plugin/cmp.lua;
-      }
-
-      {
-        plugin = telescope-nvim;
-        config = toLuaFile ./nvim/plugin/telescope.lua;
-      }
-
-      telescope-fzf-native-nvim
-
-      cmp_luasnip
-      cmp-nvim-lsp
-
-      luasnip
-      friendly-snippets
+  # TODO move this to separate file
+  programs.neovim =
+    let
+      toLua = str: "lua << EOF\n${str}\nEOF\n";
+      toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
 
 
-      lualine-nvim
+    in
+    {
+      enable = true;
 
-      {
-        plugin = (nvim-treesitter.withPlugins (p: [
-          p.tree-sitter-nix
-          p.tree-sitter-vim
-          p.tree-sitter-bash
-          p.tree-sitter-lua
-          p.tree-sitter-python
-          p.tree-sitter-json
-        ]));
-        config = toLuaFile ./nvim/plugin/treesitter.lua;
-      }
+      viAlias = true;
+      vimAlias = true;
+      vimdiffAlias = true;
 
-      vim-nix
-      vim-airline
+      extraPackages = with pkgs; [
+        lua-language-server
+        rnix-lsp
 
-      {
-        plugin = onedark-nvim;
-        config = "colorscheme onedark";
-      }
+        xclip
+        wl-clipboard
+      ];
 
-    ];
+      plugins = with pkgs.vimPlugins; [
 
-    extraLuaConfig = ''
-      ${builtins.readFile ./nvim/options.lua}
-      ${builtins.readFile ./nvim/plugin/lsp.lua}
-      ${builtins.readFile ./nvim/plugin/cmp.lua}
-      ${builtins.readFile ./nvim/plugin/telescope.lua}
-      ${builtins.readFile ./nvim/plugin/neo-tree.lua}
-      ${builtins.readFile ./nvim/plugin/treesitter.lua}
-      ${builtins.readFile ./nvim/plugin/other.lua}
-    '';
-  };
+        {
+          plugin = nvim-lspconfig;
+          config = toLuaFile ./nvim/plugin/lsp.lua;
+        }
+
+        {
+          plugin = comment-nvim;
+          config = toLua "require(\"Comment\").setup()";
+        }
+
+        neodev-nvim
+
+        {
+          plugin = neo-tree-nvim;
+          config = toLuaFile ./nvim/plugin/neo-tree.lua;
+        }
+
+        nvim-web-devicons
+        vim-devicons
+
+        vim-surround
+
+        nvim-cmp
+        {
+          plugin = nvim-cmp;
+          config = toLuaFile ./nvim/plugin/cmp.lua;
+        }
+
+        {
+          plugin = telescope-nvim;
+          config = toLuaFile ./nvim/plugin/telescope.lua;
+        }
+
+        telescope-fzf-native-nvim
+
+        cmp_luasnip
+        cmp-nvim-lsp
+
+        luasnip
+        friendly-snippets
+
+
+        # Theme
+        papercolor-theme
+        vim-airline
+        vim-airline-themes
+
+        # ===
+        # Languages
+        # haskell syntax highlighting
+        # haskell-vim
+        vim-hoogle
+        # nix syntax highlighting
+        vim-nix
+        vim-markdown
+        # latex
+        vimtex
+        coc-nvim
+        coc-vimtex # not sure if I need two
+        # ledger
+        vim-ledger
+        # rust
+        coc-rls
+        # python
+        coc-python
+        # css
+        coc-css
+        # yaml
+        coc-yaml
+        # json
+        coc-json
+        # html
+        coc-html
+        # dhall
+        dhall-vim
+
+
+        # general whitespace
+        vim-trailing-whitespace
+        vim-autoformat
+
+        lualine-nvim
+
+        {
+          plugin = (nvim-treesitter.withPlugins (p: [
+            p.tree-sitter-nix
+            p.tree-sitter-vim
+            p.tree-sitter-bash
+            p.tree-sitter-lua
+            p.tree-sitter-python
+            p.tree-sitter-json
+          ]));
+          config = toLuaFile ./nvim/plugin/treesitter.lua;
+        }
+
+
+        {
+          plugin = onedark-nvim;
+          config = "colorscheme onedark";
+        }
+
+      ];
+
+      extraLuaConfig = ''
+        ${builtins.readFile ./nvim/options.lua}
+        ${builtins.readFile ./nvim/plugin/lsp.lua}
+        ${builtins.readFile ./nvim/plugin/cmp.lua}
+        ${builtins.readFile ./nvim/plugin/telescope.lua}
+        ${builtins.readFile ./nvim/plugin/neo-tree.lua}
+        ${builtins.readFile ./nvim/plugin/treesitter.lua}
+        ${builtins.readFile ./nvim/plugin/other.lua}
+      '';
+    };
+  xdg.configFile."nvim/coc-settings.json".text = builtins.toJSON cocSettings;
 
   # This value determines the home Manager release that your
   # configuration is compatible with. This helps avoid breakage
